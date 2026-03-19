@@ -158,7 +158,8 @@ export function GridDistortion({
       animationId = requestAnimationFrame(animate);
       uniforms.time.value += 0.05;
 
-      const texData = dataTexture.image.data;
+      const texData = dataTexture.image?.data;
+      if (!texData) return;
       for (let i = 0; i < size * size; i++) {
         texData[i * 4] *= relaxation;
         texData[i * 4 + 1] *= relaxation;
