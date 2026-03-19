@@ -30,7 +30,7 @@ export function Waves({ className = "", color = "var(--accent)" }: WavesProps) {
       return resolved;
     };
 
-    let strokeColor = resolveColor();
+    const strokeColor = resolveColor();
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();

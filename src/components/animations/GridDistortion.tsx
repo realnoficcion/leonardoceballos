@@ -64,6 +64,7 @@ export function GridDistortion({
     const camera = new THREE.OrthographicCamera(0, 0, 0, 0, -1000, 1000);
     camera.position.z = 2;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let imageAspect = 1;
 
     const uniforms = {
