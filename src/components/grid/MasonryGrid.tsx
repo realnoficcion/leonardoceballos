@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Project, WorkSection } from "@/types/project";
 import { VideoCard } from "./VideoCard";
 import { CategoryFilter } from "./CategoryFilter";
@@ -25,6 +25,25 @@ function distributeToColumns(
   return cols;
 }
 
+function useBreakpoint(breakpoints: { sm: number; md: number; lg: number }) {
+  const [numCols, setNumCols] = useState(breakpoints.sm);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) setNumCols(breakpoints.lg);
+      else if (w >= 768) setNumCols(breakpoints.md);
+      else setNumCols(breakpoints.sm);
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [breakpoints.sm, breakpoints.md, breakpoints.lg]);
+
+  return numCols;
+}
+
 export function MasonryGrid({
   projects,
   section,
@@ -38,22 +57,16 @@ export function MasonryGrid({
     showFilter && categories.length > 1 ? categories[0] : null
   );
 
+  const numCols = useBreakpoint(columns);
+
   const filteredProjects = useMemo(() => {
     if (!activeCategory) return projects;
     return projects.filter((p) => p.category === activeCategory);
   }, [projects, activeCategory]);
 
-  const colsSm = useMemo(
-    () => distributeToColumns(filteredProjects, columns.sm),
-    [filteredProjects, columns.sm]
-  );
-  const colsMd = useMemo(
-    () => distributeToColumns(filteredProjects, columns.md),
-    [filteredProjects, columns.md]
-  );
-  const colsLg = useMemo(
-    () => distributeToColumns(filteredProjects, columns.lg),
-    [filteredProjects, columns.lg]
+  const distributed = useMemo(
+    () => distributeToColumns(filteredProjects, numCols),
+    [filteredProjects, numCols]
   );
 
   return (
@@ -68,31 +81,8 @@ export function MasonryGrid({
         </div>
       )}
 
-      {/* Small: 1 col */}
-      <StaggerReveal className="masonry-row-grid md:hidden">
-        {colsSm.map((col, colIdx) => (
-          <div key={colIdx} className="masonry-col">
-            {col.map((project) => (
-              <VideoCard key={project.slug} project={project} />
-            ))}
-          </div>
-        ))}
-      </StaggerReveal>
-
-      {/* Medium: 2 cols */}
-      <StaggerReveal className="masonry-row-grid hidden md:flex lg:hidden">
-        {colsMd.map((col, colIdx) => (
-          <div key={colIdx} className="masonry-col">
-            {col.map((project) => (
-              <VideoCard key={project.slug} project={project} />
-            ))}
-          </div>
-        ))}
-      </StaggerReveal>
-
-      {/* Large: 3 cols */}
-      <StaggerReveal className="masonry-row-grid hidden lg:flex">
-        {colsLg.map((col, colIdx) => (
+      <StaggerReveal className="masonry-row-grid">
+        {distributed.map((col, colIdx) => (
           <div key={colIdx} className="masonry-col">
             {col.map((project) => (
               <VideoCard key={project.slug} project={project} />
