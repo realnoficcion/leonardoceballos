@@ -1,8 +1,8 @@
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 const spotifyArtists = [
-  { name: "Stroka", id: "53DrlPptHzk8iT1xoJDYX5" },
   { name: "Real No Ficcíon", id: "3YQGp0xoC2GtuMBXEQ0OnK" },
+  { name: "Stroka", id: "53DrlPptHzk8iT1xoJDYX5" },
 ];
 
 export function Autoral() {
