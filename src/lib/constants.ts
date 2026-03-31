@@ -11,6 +11,7 @@ export const SITE = {
 export const NAV_LINKS = [
   { label: "Video", href: "#video-work" },
   { label: "Sound", href: "#sound-work" },
+  { label: "Autoral", href: "#autoral" },
   { label: "Dev", href: "#dev-work" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
